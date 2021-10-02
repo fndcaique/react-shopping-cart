@@ -1,23 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import ProductList from './components/ProductList';
+/*
 
+Vários itens "https://api.mercadolibre.com/sites/MLB/search?q=$QUERY"
+
+1 item "https://api.mercadolibre.com/items/$ItemID"
+
+*/
 function App() {
+
+  const [products, setProducts] = useState([]);
+
+  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+    .then(response => response.json())
+    .then(({ results }) => setProducts(results))
+    .catch(console.log)
+  if (!products.length) {
+    return <p>Loading</p>
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ProductList products={products}></ProductList>
     </div>
   );
 }
